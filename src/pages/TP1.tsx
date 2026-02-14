@@ -9,7 +9,7 @@ import GlassCard from "@/components/GlassCard";
 
 const exercises = [
   { id: "ex1", label: "Exercice 1", subtitle: "Signaux", icon: Waves, ready: true },
-  { id: "ex2", label: "Exercice 2", subtitle: "Convolution", icon: GitBranch, ready: true },
+  { id: "ex2", label: "Exercice 2", subtitle: "Convolution", icon: GitBranch, ready: false },
   { id: "ex3", label: "Exercice 3", subtitle: "x₁₄(t)", icon: BarChart3, ready: false },
   { id: "ex4", label: "Exercice 4", subtitle: "Paire/Impaire", icon: FlaskConical, ready: false },
 ];
@@ -31,7 +31,9 @@ const TP1 = () => {
     const ex = exercises.find((e) => e.id === activeEx);
     if (!ex?.ready) return <ComingSoon label={ex?.label ?? ""} />;
     if (activeEx === "ex1") return <Exercise1 />;
-    if (activeEx === "ex2") return <Exercise2 />;
+//    if (activeEx === "ex2") return <Exercise2 />;
+//    if (activeEx === "ex3") return <Exercise3 />;
+//    if (activeEx === "ex4") return <Exercise4 />;
     return null;
   };
 
