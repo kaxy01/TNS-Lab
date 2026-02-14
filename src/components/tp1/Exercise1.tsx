@@ -181,7 +181,7 @@ const AddSignalForm = ({ onAdd }: { onAdd: (s: CustomSignalDef) => void }) => {
         Ajouter un signal personnalisé
       </h3>
       <div className="flex flex-col sm:flex-row gap-2">
-        <Input placeholder="Nom (ex: Mon signal)" value={label} onChange={(e) => setLabel(e.target.value)} className="glass border-border/40 text-sm" />
+        <Input placeholder="Nom" value={label} onChange={(e) => setLabel(e.target.value)} className="glass border-border/40 text-sm sm:w-40 shrink-0" />
         <Input placeholder="f(t) = sin(2*pi*t) + cos(t)" value={expression} onChange={(e) => setExpression(e.target.value)} className="glass border-border/40 text-sm flex-1 font-mono" />
         <button onClick={handleAdd} className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity shrink-0">
           Ajouter
