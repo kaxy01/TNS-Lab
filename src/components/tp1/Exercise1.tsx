@@ -1,10 +1,9 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { signals, type SignalDef, computeEnergy, computePower } from "@/data/signals";
+import { signals, computeEnergy, computePower } from "@/data/signals";
 import SignalChart from "@/components/SignalChart";
 import GlassCard from "@/components/GlassCard";
 import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Maximize2, Plus, Trash2 } from "lucide-react";
 import {
@@ -85,52 +84,25 @@ const SignalModal = ({ sig, color, label, open, onClose }: {
   sig: { fn: (t: number) => number; tRange: [number, number]; label: string; energy?: string; energyFormula?: string; powerFormula?: string };
   color: string; label: string; open: boolean; onClose: () => void;
 }) => {
-  const [amplitude, setAmplitude] = useState(1);
-  const [frequency, setFrequency] = useState(1);
-  const [offset, setOffset] = useState(0);
-
-  const modifiedFn = useCallback(
-    (t: number) => amplitude * sig.fn((t - offset) * frequency),
-    [sig, amplitude, frequency, offset]
-  );
-
   const energy = useMemo(
-    () => computeEnergy(sig.fn, sig.tRange[0], sig.tRange[1], amplitude, frequency, offset),
-    [sig, amplitude, frequency, offset]
+    () => computeEnergy(sig.fn, sig.tRange[0], sig.tRange[1]),
+    [sig]
   );
   const power = useMemo(
-    () => computePower(sig.fn, sig.tRange[0], sig.tRange[1], amplitude, frequency, offset),
-    [sig, amplitude, frequency, offset]
+    () => computePower(sig.fn, sig.tRange[0], sig.tRange[1]),
+    [sig]
   );
-
-  const sliders = [
-    { label: "Amplitude", value: amplitude, set: setAmplitude, min: 0.1, max: 3, cls: "[&_[role=slider]]:border-primary" },
-    { label: "Fr\u00E9quence/Taux", value: frequency, set: setFrequency, min: 0.1, max: 5, cls: "[&_[role=slider]]:border-secondary [&_span:first-child>span]:bg-secondary" },
-    { label: "D\u00E9calage", value: offset, set: setOffset, min: -3, max: 3, cls: "[&_[role=slider]]:border-accent [&_span:first-child>span]:bg-accent" },
-  ];
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="glass-strong border-border/40 max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-semibold text-lg" style={{ color }}>{sig.label}</DialogTitle>
-          <DialogDescription className="sr-only">{"Visualisation interactive du signal " + sig.label}</DialogDescription>
+          <DialogDescription className="sr-only">{"Visualisation du signal " + sig.label}</DialogDescription>
         </DialogHeader>
 
         <div className="h-[280px] -mx-2">
-          <SignalChart fn={modifiedFn} tRange={sig.tRange} label={label} color={color} height={280} />
-        </div>
-
-        <div className="space-y-4 mt-2">
-          {sliders.map((s) => (
-            <div key={s.label}>
-              <label className="text-sm text-muted-foreground mb-1.5 flex items-center justify-between">
-                <span>{s.label}</span>
-                <span className="font-mono text-foreground">{s.value.toFixed(1)}</span>
-              </label>
-              <Slider value={[s.value]} onValueChange={(v) => s.set(v[0])} min={s.min} max={s.max} step={0.1} className={s.cls} />
-            </div>
-          ))}
+          <SignalChart fn={sig.fn} tRange={sig.tRange} label={label} color={color} height={280} />
         </div>
 
         {sig.energy && (
