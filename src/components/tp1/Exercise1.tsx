@@ -81,7 +81,7 @@ const SignalCard = ({ sig, color, label, onClick }: {
 /* ── Signal Modal ── */
 
 const SignalModal = ({ sig, color, label, open, onClose }: {
-  sig: { fn: (t: number) => number; tRange: [number, number]; label: string; energy?: string; energyFormula?: string; powerFormula?: string };
+  sig: { fn: (t: number) => number; tRange: [number, number]; label: string; energy?: string };
   color: string; label: string; open: boolean; onClose: () => void;
 }) => {
   const energy = useMemo(
@@ -123,15 +123,6 @@ const SignalModal = ({ sig, color, label, open, onClose }: {
             <p className="text-sm font-mono text-foreground font-semibold">P = {power.toFixed(4)}</p>
           </GlassCard>
         </div>
-
-        {sig.energyFormula && sig.powerFormula && (
-          <GlassCard className="p-3 mt-1">
-            <p className="text-xs text-muted-foreground mb-1">{"Formule d'\u00E9nergie :"}</p>
-            <p className="text-sm font-mono text-foreground">{sig.energyFormula}</p>
-            <p className="text-xs text-muted-foreground mt-2 mb-1">Formule de puissance :</p>
-            <p className="text-sm font-mono text-foreground">{sig.powerFormula}</p>
-          </GlassCard>
-        )}
       </DialogContent>
     </Dialog>
   );

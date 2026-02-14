@@ -57,8 +57,6 @@ export interface SignalDef {
   formula: string;
   tRange: [number, number];
   energy: string;
-  energyFormula: string;
-  powerFormula: string;
   color: string;
 }
 
@@ -70,8 +68,7 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2081(t) = 2\u00B7Rect(2t - 1)",
     tRange: [-1, 2],
     energy: "\u00C9nergie finie",
-    energyFormula: "E = \u222B|2Rect(2t-1)|\u00B2dt = 2",
-    powerFormula: "P = 0 (\u00E9nergie finie)",
+
     color: "hsl(220, 90%, 60%)",
   },
   x2: {
@@ -81,8 +78,7 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2082(t) = sin(\u03C0t)\u00B7Rect(t/2)",
     tRange: [-2, 2],
     energy: "\u00C9nergie finie",
-    energyFormula: "E = \u222B|sin(\u03C0t)\u00B7Rect(t/2)|\u00B2dt",
-    powerFormula: "P = 0 (\u00E9nergie finie)",
+
     color: "hsl(280, 80%, 65%)",
   },
   x3: {
@@ -92,8 +88,7 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2083(t) = Tri(2t)",
     tRange: [-1.5, 1.5],
     energy: "\u00C9nergie finie",
-    energyFormula: "E = \u222B|Tri(2t)|\u00B2dt",
-    powerFormula: "P = 0 (\u00E9nergie finie)",
+
     color: "hsl(140, 70%, 50%)",
   },
   x4: {
@@ -103,8 +98,6 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2084(t) = U(t - 2)",
     tRange: [-1, 5],
     energy: "Puissance finie",
-    energyFormula: "E = \u221E",
-    powerFormula: "P = 1/2",
     color: "hsl(45, 90%, 55%)",
   },
   x5: {
@@ -114,8 +107,6 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2085(t) = U(3 - t)",
     tRange: [-1, 6],
     energy: "Puissance finie",
-    energyFormula: "E = \u221E",
-    powerFormula: "P = 1/2",
     color: "hsl(200, 90%, 55%)",
   },
   x6: {
@@ -125,8 +116,7 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2086(t) = 2\u03B4(t+1) - \u03B4(t-2) + \u03B4(t) - 2\u03B4(t-1)",
     tRange: [-3, 4],
     energy: "\u00C9nergie \u221E (distributions)",
-    energyFormula: "E = \u221E (impulsions de Dirac)",
-    powerFormula: "P = \u221E",
+
     color: "hsl(0, 85%, 60%)",
   },
   x7: {
@@ -136,8 +126,6 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2087(t) = Rect((t-1)/2) - Rect((t+1)/2)",
     tRange: [-3, 3],
     energy: "\u00C9nergie finie",
-    energyFormula: "E = \u222B|x\u2087(t)|\u00B2dt",
-    powerFormula: "P = 0 (\u00E9nergie finie)",
     color: "hsl(270, 80%, 65%)",
   },
   x8: {
@@ -147,8 +135,6 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2088(t) = Tri(t-1) - Tri(t+1)",
     tRange: [-3, 3],
     energy: "\u00C9nergie finie",
-    energyFormula: "E = \u222B|x\u2088(t)|\u00B2dt",
-    powerFormula: "P = 0 (\u00E9nergie finie)",
     color: "hsl(340, 80%, 60%)",
   },
   x9: {
@@ -158,8 +144,6 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2089(t) = Rect(t/2) - Tri(t)",
     tRange: [-2, 2],
     energy: "\u00C9nergie finie",
-    energyFormula: "E = \u222B|x\u2089(t)|\u00B2dt",
-    powerFormula: "P = 0 (\u00E9nergie finie)",
     color: "hsl(30, 90%, 55%)",
   },
   x10: {
@@ -169,8 +153,6 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2081\u2080(t) = exp(-t)\u00B7u(t - 2)",
     tRange: [-1, 6],
     energy: "\u00C9nergie finie",
-    energyFormula: "E = \u222Be\u207B\u00B2\u1D57dt (t\u22652) = e\u207B\u2074/2",
-    powerFormula: "P = 0 (\u00E9nergie finie)",
     color: "hsl(15, 90%, 55%)",
   },
   x11: {
@@ -180,8 +162,7 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2081\u2081(t) = sin(4\u03C0t), f\u2080=2Hz, T=0.5s",
     tRange: [-1, 1],
     energy: "Puissance finie",
-    energyFormula: "E = \u221E (signal p\u00E9riodique)",
-    powerFormula: "P = 1/2 (A\u00B2/2 = 1/2)",
+
     color: "hsl(170, 80%, 50%)",
   },
   x12: {
@@ -191,8 +172,7 @@ export const signals: Record<string, SignalDef> = {
     formula: "H(f) = sinc(f) = sin(\u03C0f)/(\u03C0f)",
     tRange: [-5, 5],
     energy: "\u00C9nergie finie",
-    energyFormula: "E = \u222B|sinc(f)|\u00B2df = 1",
-    powerFormula: "P = 0 (\u00E9nergie finie)",
+
     color: "hsl(50, 90%, 55%)",
   },
   x13: {
@@ -202,8 +182,6 @@ export const signals: Record<string, SignalDef> = {
     formula: "x\u2081\u2083(t) = R(t+1) - 2R(t) + R(t-1)",
     tRange: [-3, 3],
     energy: "\u00C9nergie finie",
-    energyFormula: "E = \u222B|x\u2081\u2083(t)|\u00B2dt",
-    powerFormula: "P = 0 (\u00E9nergie finie)",
     color: "hsl(100, 70%, 50%)",
   },
 };
