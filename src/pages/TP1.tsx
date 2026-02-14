@@ -1,29 +1,45 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowLeft, FlaskConical, Waves, GitBranch, BarChart3 } from "lucide-react";
+import { ArrowLeft, Waves, GitBranch, BarChart3, FlaskConical, Clock } from "lucide-react";
 import WaveBackground from "@/components/WaveBackground";
 import Exercise1 from "@/components/tp1/Exercise1";
 import Exercise2 from "@/components/tp1/Exercise2";
-import Exercise3 from "@/components/tp1/Exercise3";
-import Exercise4 from "@/components/tp1/Exercise4";
+import GlassCard from "@/components/GlassCard";
 
 const exercises = [
-  { id: "ex1", label: "Exercice 1", subtitle: "Signaux", icon: Waves },
-  { id: "ex2", label: "Exercice 2", subtitle: "Convolution", icon: GitBranch },
-  { id: "ex3", label: "Exercice 3", subtitle: "x₁₄(t)", icon: BarChart3 },
-  { id: "ex4", label: "Exercice 4", subtitle: "Paire/Impaire", icon: FlaskConical },
+  { id: "ex1", label: "Exercice 1", subtitle: "Signaux", icon: Waves, ready: true },
+  { id: "ex2", label: "Exercice 2", subtitle: "Convolution", icon: GitBranch, ready: true },
+  { id: "ex3", label: "Exercice 3", subtitle: "x₁₄(t)", icon: BarChart3, ready: false },
+  { id: "ex4", label: "Exercice 4", subtitle: "Paire/Impaire", icon: FlaskConical, ready: false },
 ];
+
+const ComingSoon = ({ label }: { label: string }) => (
+  <div className="flex flex-col items-center justify-center py-20">
+    <GlassCard className="p-10 text-center max-w-md">
+      <Clock className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
+      <h2 className="text-xl font-bold text-foreground mb-2">{label}</h2>
+      <p className="text-muted-foreground">{"Contenu à venir — cet exercice n'a pas encore été réalisé."}</p>
+    </GlassCard>
+  </div>
+);
 
 const TP1 = () => {
   const [activeEx, setActiveEx] = useState("ex1");
+
+  const renderContent = () => {
+    const ex = exercises.find((e) => e.id === activeEx);
+    if (!ex?.ready) return <ComingSoon label={ex?.label ?? ""} />;
+    if (activeEx === "ex1") return <Exercise1 />;
+    if (activeEx === "ex2") return <Exercise2 />;
+    return null;
+  };
 
   return (
     <div className="min-h-screen relative gradient-animated">
       <WaveBackground />
 
       <div className="relative z-10">
-        {/* Top bar */}
         <header className="glass-strong sticky top-0 z-20 px-6 py-3 flex items-center gap-4">
           <Link
             to="/"
@@ -34,12 +50,11 @@ const TP1 = () => {
           </Link>
           <div className="h-4 w-px bg-border" />
           <h1 className="text-sm font-semibold text-foreground">
-            TP1 — Généralités sur les Signaux
+            {"TP1 — Généralités sur les Signaux"}
           </h1>
         </header>
 
         <div className="flex">
-          {/* Sidebar */}
           <aside className="hidden md:flex flex-col w-60 glass-strong min-h-[calc(100vh-52px)] sticky top-[52px] p-4 gap-2 border-r border-border/30">
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 px-2">
               Navigation
@@ -57,13 +72,14 @@ const TP1 = () => {
                 <ex.icon className="w-4 h-4 shrink-0" />
                 <div>
                   <div className="font-medium">{ex.label}</div>
-                  <div className="text-xs opacity-70">{ex.subtitle}</div>
+                  <div className="text-xs opacity-70">
+                    {ex.ready ? ex.subtitle : "À venir"}
+                  </div>
                 </div>
               </button>
             ))}
           </aside>
 
-          {/* Mobile tabs */}
           <div className="md:hidden w-full px-4 pt-4">
             <div className="glass rounded-lg p-1 flex gap-1 overflow-x-auto">
               {exercises.map((ex) => (
@@ -82,7 +98,6 @@ const TP1 = () => {
             </div>
           </div>
 
-          {/* Content */}
           <main className="flex-1 p-6 md:p-8 max-w-5xl">
             <AnimatePresence mode="wait">
               <motion.div
@@ -92,10 +107,7 @@ const TP1 = () => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                {activeEx === "ex1" && <Exercise1 />}
-                {activeEx === "ex2" && <Exercise2 />}
-                {activeEx === "ex3" && <Exercise3 />}
-                {activeEx === "ex4" && <Exercise4 />}
+                {renderContent()}
               </motion.div>
             </AnimatePresence>
           </main>
