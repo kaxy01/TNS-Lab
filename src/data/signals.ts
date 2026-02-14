@@ -35,12 +35,9 @@ export const computeEnergy = (
   fn: (t: number) => number,
   tMin: number,
   tMax: number,
-  amplitude = 1,
-  frequency = 1,
-  offset = 0,
 ): number => {
   return simpson((t) => {
-    const v = amplitude * fn((t - offset) * frequency);
+    const v = fn(t);
     return v * v;
   }, tMin, tMax);
 };
@@ -49,11 +46,8 @@ export const computePower = (
   fn: (t: number) => number,
   tMin: number,
   tMax: number,
-  amplitude = 1,
-  frequency = 1,
-  offset = 0,
 ): number => {
-  return computeEnergy(fn, tMin, tMax, amplitude, frequency, offset) / (tMax - tMin);
+  return computeEnergy(fn, tMin, tMax) / (tMax - tMin);
 };
 
 export interface SignalDef {
