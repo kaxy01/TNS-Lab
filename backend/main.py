@@ -6,6 +6,10 @@ import scipy.integrate as integrate
 from google import genai
 import os
 
+# [EXPLANATION] This file is the backend API using FastAPI.
+# It handles HTTP requests, performs mathematical calculations,
+# and connects to Google's Gemini AI to provide educational explanations.
+
 # ==========================================
 # CONFIGURATION IA
 # ==========================================
@@ -14,13 +18,17 @@ API_KEY = "AIzaSyD-ncSlLGDb0kSERukNPSZU0cwMRSGNrdM" # ⚠️ Remplace par ta vra
 
 client = None
 try:
+    # [EXPLANATION] Initialize the Google Gemini AI client.
+    # We use this client to generate the "Professor" explanations in the /compute endpoint.
     client = genai.Client(api_key=API_KEY)
-    print("✅ IA Connectée (Modèle: gemini-1.5-flash)")
+    print("✅ IA Connectée (Modèle: gemini-3-flash)")
 except Exception as e:
     print(f"⚠️ Erreur Client IA : {e}")
 
 app = FastAPI()
 
+# [EXPLANATION] Setup CORS (Cross-Origin Resource Sharing).
+# This allows your frontend (likely running on a different port) to access this API.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -34,17 +42,23 @@ class SignalRequest(BaseModel):
     t_end: float
 
 def get_signal_fn(expr: str):
+    # [EXPLANATION] Security & Parsing:
+    # This dictionary defines the ONLY functions allowed in the input string.
+    # This prevents users from running malicious code (like deleting files) via the input.
     safe_dict = {
         'np': np, 'sin': np.sin, 'cos': np.cos, 'tan': np.tan, 
         'exp': np.exp, 'pi': np.pi, 'sqrt': np.sqrt, 'abs': np.abs,
-        'rect': lambda t: np.where(np.abs(t) <= 0.5, 1, 0),
-        'tri': lambda t: np.where(np.abs(t) <= 1, 1 - np.abs(t), 0),
-        'u': lambda t: np.where(t >= 0, 1, 0),
-        'ramp': lambda t: np.where(t >= 0, t, 0),
-        'sinc': lambda t: np.sinc(t), 
-        'delta': lambda t, t0, w=0.03: np.where(np.abs(t - t0) < w, 1 / (2 * w), 0)
+        # Signal Processing specific functions defined using lambda (anonymous functions):
+        'rect': lambda t: np.where(np.abs(t) <= 0.5, 1, 0),         # Rectangular pulse
+        'tri': lambda t: np.where(np.abs(t) <= 1, 1 - np.abs(t), 0), # Triangular pulse
+        'u': lambda t: np.where(t >= 0, 1, 0),                      # Unit step
+        'ramp': lambda t: np.where(t >= 0, t, 0),                   # Ramp function
+        'sinc': lambda t: np.sinc(t),                               # Sinc function
+        'delta': lambda t, t0, w=0.03: np.where(np.abs(t - t0) < w, 1 / (2 * w), 0) # Approx. Dirac Delta
     }
     try:
+        # [EXPLANATION] Safe Evaluation:
+        # Evaluate the string using ONLY the safe_dict functions. 't' is passed as the variable.
         return lambda t: eval(expr, {"__builtins__": None}, {**safe_dict, 't': t})
     except:
         return None
@@ -54,8 +68,11 @@ def detect_signal_type(expr: str):
     Détermine si le signal est Périodique ou Transitoire (Support Borné).
     Heuristique simple pour le TP.
     """
+    # [EXPLANATION] Classification Logic:
+    # We analyze the text of the function to guess if it repeats forever (Periodic)
+    # or if it disappears after a while (Transient/Energy signal).
     expr_lower = expr.lower()
-    # Si contient sin/cos mais PAS de terme d'amortissement (exp, rect, tri)
+    # If it has sin/cos BUT NO decay terms (like exp, rect, etc.), it's likely Periodic (Power signal).
     if (('sin' in expr_lower or 'cos' in expr_lower) and 
         not ('exp' in expr_lower or 'rect' in expr_lower or 'tri' in expr_lower or 'sinc' in expr_lower)):
         return "periodic"
@@ -71,6 +88,9 @@ async def compute_signal_metrics(req: SignalRequest):
     sig_type = detect_signal_type(req.expression)
 
     # 2. Calculs Numériques de base (sur la fenêtre demandée)
+    # [EXPLANATION] Numerical Integration:
+    # We use 'quad' to calculate the area under the curve (integral) of the signal squared.
+    # This gives us the Energy on the specific window [t_start, t_end].
     energy_window, _ = integrate.quad(lambda t: fn(t)**2, req.t_start, req.t_end, limit=100)
     duration = req.t_end - req.t_start
     power_window = energy_window / duration if duration > 0 else 0
@@ -93,6 +113,9 @@ async def compute_signal_metrics(req: SignalRequest):
     
     if client:
         try:
+            # [EXPLANATION] AI Prompting:
+            # We construct a detailed prompt for Gemini to act as a Professor.
+            # We give it the math rules (Periodic = Infinite Energy) and ask for a proof.
             prompt = f"""
             Tu es un professeur expert en Traitement du Signal.
             CONTEXTE : Signal x(t) = {req.expression} sur [{req.t_start}, {req.t_end}].
