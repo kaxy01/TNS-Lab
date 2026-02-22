@@ -9,7 +9,7 @@ import GlassCard from "@/components/GlassCard";
 
 const exercises = [
   { id: "ex1", label: "Exercice 1", subtitle: "Signaux", icon: Waves, ready: true },
-  { id: "ex2", label: "Exercice 2", subtitle: "Convolution", icon: GitBranch, ready: false },
+  { id: "ex2", label: "Exercice 2", subtitle: "Dirac & Signaux", icon: GitBranch, ready: true },
   { id: "ex3", label: "Exercice 3", subtitle: "x₁₄(t)", icon: BarChart3, ready: false },
   { id: "ex4", label: "Exercice 4", subtitle: "Paire/Impaire", icon: FlaskConical, ready: false },
 ];
@@ -31,9 +31,9 @@ const TP1 = () => {
     const ex = exercises.find((e) => e.id === activeEx);
     if (!ex?.ready) return <ComingSoon label={ex?.label ?? ""} />;
     if (activeEx === "ex1") return <Exercise1 />;
-//    if (activeEx === "ex2") return <Exercise2 />;
-//    if (activeEx === "ex3") return <Exercise3 />;
-//    if (activeEx === "ex4") return <Exercise4 />;
+    if (activeEx === "ex2") return <Exercise2 />;
+    //    if (activeEx === "ex3") return <Exercise3 />;
+    //    if (activeEx === "ex4") return <Exercise4 />;
     return null;
   };
 
@@ -65,11 +65,10 @@ const TP1 = () => {
               <button
                 key={ex.id}
                 onClick={() => setActiveEx(ex.id)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-300 text-left ${
-                  activeEx === ex.id
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-300 text-left ${activeEx === ex.id
                     ? "bg-primary/10 text-primary neon-glow-cyan border border-primary/20"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
-                }`}
+                  }`}
               >
                 <ex.icon className="w-4 h-4 shrink-0" />
                 <div>
@@ -88,11 +87,10 @@ const TP1 = () => {
                 <button
                   key={ex.id}
                   onClick={() => setActiveEx(ex.id)}
-                  className={`flex-1 min-w-fit px-3 py-2 rounded-md text-xs font-medium transition-all ${
-                    activeEx === ex.id
+                  className={`flex-1 min-w-fit px-3 py-2 rounded-md text-xs font-medium transition-all ${activeEx === ex.id
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground"
-                  }`}
+                    }`}
                 >
                   {ex.label}
                 </button>
