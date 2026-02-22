@@ -14,25 +14,31 @@ import os
 # CONFIGURATION IA — Gemini + Groq fallback
 # ==========================================
 
-GEMINI_KEY = "AIzaSyD-ncSlLGDb0kSERukNPSZU0cwMRSGNrdM"
-GROQ_KEY   = "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"
+GEMINI_KEY = os.getenv("GEMINI_KEY")
+GROQ_KEY   = os.getenv("GROQ_KEY")
 
 # ── Gemini client ──
 client = None
-try:
-    client = genai.Client(api_key=GEMINI_KEY)
-    print("[OK] Gemini connecte")
-except Exception as e:
-    print(f"[WARN] Gemini non disponible : {e}")
+if GEMINI_KEY:
+    try:
+        client = genai.Client(api_key=GEMINI_KEY)
+        print("[OK] Gemini connecte")
+    except Exception as e:
+        print(f"[WARN] Gemini non disponible : {e}")
+else:
+    print("[WARN] GEMINI_KEY non trouvee dans l'environnement")
 
 # ── Groq client (fallback) ──
 groq_client = None
-try:
-    from groq import Groq
-    groq_client = Groq(api_key=GROQ_KEY)
-    print("[OK] Groq connecte (fallback)")
-except Exception as e:
-    print(f"[WARN] Groq non disponible : {e}")
+if GROQ_KEY:
+    try:
+        from groq import Groq
+        groq_client = Groq(api_key=GROQ_KEY)
+        print("[OK] Groq connecte (fallback)")
+    except Exception as e:
+        print(f"[WARN] Groq non disponible : {e}")
+else:
+    print("[WARN] GROQ_KEY non trouvee dans l'environnement")
 
 def ai_generate(prompt: str) -> str:
     """

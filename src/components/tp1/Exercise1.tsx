@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { API_BASE_URL } from "@/config";
 import { motion } from "framer-motion";
 import { signals, computeEnergy, computePower } from "@/data/signals";
 import SignalChart from "@/components/SignalChart";
@@ -22,7 +23,7 @@ const CUSTOM_COLOR = "hsl(160, 80%, 55%)";
 // It sends the math formula and time range, then waits for the calculated Energy, Power, and AI Explanation.
 const fetchSignalMetrics = async (expression: string, tRange: [number, number]) => {
   try {
-    const response = await fetch("http://localhost:8000/compute", {
+    const response = await fetch(`${API_BASE_URL}/compute`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ expression, t_start: tRange[0], t_end: tRange[1] }),

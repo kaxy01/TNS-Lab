@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
+import { API_BASE_URL } from "@/config";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -466,7 +467,7 @@ const SignalLab = () => {
         setAnalysisError(null);
         setAnalysisResult(null);
         try {
-            const res = await fetch("http://localhost:8000/ex-lab/demo", {
+            const res = await fetch(`${API_BASE_URL}/ex-lab/demo`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ expression: backendExpr }),
@@ -496,7 +497,7 @@ const SignalLab = () => {
         setQuizResult(null);
         setQuizAnswer({ fn: "", amplitude: "1", frequency: "1" });
         try {
-            const res = await fetch("http://localhost:8000/ex-lab/quiz", { method: "POST" });
+            const res = await fetch(`${API_BASE_URL}/ex-lab/quiz`, { method: "POST" });
             const data = await res.json();
             setQuizSignal(data);
         } catch {
@@ -509,7 +510,7 @@ const SignalLab = () => {
         if (!quizSignal?.id) return;
         setQuizCheckLoading(true);
         try {
-            const res = await fetch("http://localhost:8000/ex-lab/quiz/check", {
+            const res = await fetch(`${API_BASE_URL}/ex-lab/quiz/check`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

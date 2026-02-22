@@ -2,3 +2,6 @@ fastapi
 uvicorn
 numpy
 scipy
+google-genai
+groq
+pydantic
