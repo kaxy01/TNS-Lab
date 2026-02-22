@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Zap, Waves, BookOpen } from "lucide-react";
+import { ArrowRight, Zap, Waves, BookOpen, FlaskConical } from "lucide-react";
 import WaveBackground from "@/components/WaveBackground";
 import GlassCard from "@/components/GlassCard";
 
@@ -93,6 +93,32 @@ const Index = () => {
                 </p>
                 <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
                   Explorer <ArrowRight className="w-4 h-4" />
+                </div>
+              </GlassCard>
+            </Link>
+
+            {/* Signal Lab Card */}
+            <Link to="/lab" className="group">
+              <GlassCard
+                glow="cyan"
+                className="h-full transition-all duration-500 group-hover:scale-[1.03] group-hover:shadow-[0_0_30px_hsl(140_70%_55%/0.4)]"
+                whileHover={{ y: -5 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                    <FlaskConical className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <div>
+                    <span className="text-xs text-emerald-400 font-mono">LABO</span>
+                    <h3 className="text-lg font-semibold text-foreground">Labo Signal</h3>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Construis, analyse et décompose des signaux. Énergie, puissance, fréquence et démonstrations mathématiques.
+                </p>
+                <div className="flex items-center gap-2 text-emerald-400 text-sm font-medium group-hover:gap-3 transition-all">
+                  Expérimenter <ArrowRight className="w-4 h-4" />
                 </div>
               </GlassCard>
             </Link>
