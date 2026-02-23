@@ -124,7 +124,7 @@ const Index = () => {
             </Link>
 
             {/* Future TP placeholders */}
-            {[2, 3].map((num) => (
+            {[2].map((num) => (
               <GlassCard
                 key={num}
                 className="h-full opacity-40 cursor-not-allowed"
