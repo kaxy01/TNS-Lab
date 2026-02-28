@@ -5,3 +5,4 @@ scipy
 google-genai
 groq
 pydantic
+python-dotenv

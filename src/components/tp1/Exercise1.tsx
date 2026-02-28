@@ -1,121 +1,18 @@
-import { useState, useMemo, useEffect } from "react";
-import { API_BASE_URL } from "@/config";
-import { motion } from "framer-motion";
+import { useState, useMemo } from "react";
 import { signals, computeEnergy, computePower } from "@/data/signals";
-import SignalChart from "@/components/SignalChart";
 import GlassCard from "@/components/GlassCard";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Maximize2, Plus, Trash2, AlertCircle, Calculator, Loader2, Pencil, Save, X } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Plus, Trash2, AlertCircle } from "lucide-react";
+import { getSignalTypeJS } from "@/utils/signalAnalysis";
+import { parseExpression } from "@/utils/mathUtils";
+import { SignalCard } from "./ex1/SignalCard";
+import { SignalModal } from "./ex1/SignalModal";
 
-/* ── CONFIG ── */
-// [EXPLANATION] Standard green color for our custom signals
 const CUSTOM_COLOR = "hsl(160, 80%, 55%)";
 
-/* ── 1. LIEN PYTHON ── */
-// [EXPLANATION] This function connects to our Python Backend (main.py).
-// It sends the math formula and time range, then waits for the calculated Energy, Power, and AI Explanation.
-const fetchSignalMetrics = async (expression: string, tRange: [number, number]) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/compute`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ expression, t_start: tRange[0], t_end: tRange[1] }),
-    });
-    return await response.json();
-  } catch (err) {
-    // [EXPLANATION] Fallback if the Python server is not running (e.g., user forgot to start it).
-    return { energy: 0, power: 0, ai_analysis: "Erreur : Serveur Python non connecté." };
-  }
-};
-
-/* ── 2. PARSEUR JS ── */
-// [EXPLANATION] This is a "Lightweight" version of the Python parser, running directly in the Browser.
-// It allows us to draw the chart INSTANTLY without waiting for the server.
-const parseExpression = (expr: string): ((t: number) => number) | null => {
-  try {
-    // 1. Translate simple math terms into JavaScript equivalents (e.g., sin -> Math.sin)
-    let sanitized = expr
-      .replace(/\bsin\b/g, "Math.sin").replace(/\bcos\b/g, "Math.cos")
-      .replace(/\btan\b/g, "Math.tan").replace(/\babs\b/g, "Math.abs")
-      .replace(/\bexp\b/g, "Math.exp").replace(/\bsqrt\b/g, "Math.sqrt")
-      .replace(/\bpi\b/gi, "Math.PI").replace(/\^/g, "**");
-
-    // 2. Define special signal functions (Rect, Tri, Step, etc.) inside the function scope
-    const functionBody = `
-      const rect = (t) => Math.abs(t) <= 0.5 ? 1 : 0;
-      const tri = (t) => Math.abs(t) <= 1 ? 1 - Math.abs(t) : 0;
-      const u = (t) => t >= 0 ? 1 : 0;
-      const ramp = (t) => t >= 0 ? t : 0;
-      const sinc = (t) => t === 0 ? 1 : Math.sin(Math.PI * t) / (Math.PI * t);
-      // 3. Return the result of the user's expression
-      return (${sanitized});
-    `;
-
-    // 4. Create a new executable function from this string
-    const fn = new Function("t", functionBody) as (t: number) => number;
-    fn(0); // Test run to check for errors
-    return fn;
-  } catch { return null; }
-};
-
-/* ── CLASSIFICATION SIMPLE CÔTÉ JS (Pour l'instantanné) ── */
-// [EXPLANATION] Quick guess of signal type in the browser.
-// This gives immediate feedback while waiting for the detailed Python analysis.
-const getSignalTypeJS = (expr: string) => {
-  const e = expr.toLowerCase();
-  // If it looks like a sine wave and doesn't decay, we assume it's Periodic.
-  if ((e.includes('sin') || e.includes('cos')) && !e.includes('exp') && !e.includes('rect') && !e.includes('tri')) {
-    return "periodic";
-  }
-  return "transient";
-}
-
-/* ── 3. COMPOSANT CARTE ── */
-// [EXPLANATION] Displays a single signal as a clickable card with a chart preview.
-const SignalCard = ({ sig, color, label, onClick }: any) => (
-  <motion.div whileHover={{ scale: 1.03, boxShadow: `0 0 20px ${color}40` }} className="relative">
-    <GlassCard
-      className="p-4 cursor-pointer group transition-all duration-300 border border-white/5 hover:border-current relative"
-      style={{ color }}
-      onClick={onClick}
-    >
-      <button className="absolute top-3 right-3 p-1.5 rounded-md glass opacity-0 group-hover:opacity-100 transition-opacity z-10">
-        <Maximize2 className="w-3.5 h-3.5 text-muted-foreground" />
-      </button>
-
-      <h3 className="text-sm font-semibold mb-1">{sig.label}</h3>
-
-      {sig.energy && (
-        <Badge variant="outline" className="text-[10px] px-2 py-0 mb-3 border-current" style={{ color, borderColor: `${color}60` }}>
-          {sig.energy}
-        </Badge>
-      )}
-
-      {/* Chart Preview */}
-      <div className="h-[120px] -mx-2 pointer-events-none">
-        <SignalChart fn={sig.fn} tRange={sig.tRange} label={label} color={color} height={120} />
-      </div>
-
-      {(sig.shortLabel || sig.expression) && (
-        <p className="text-xs text-muted-foreground text-center mt-2 font-mono opacity-60 group-hover:opacity-100 transition-opacity truncate px-2">
-          {sig.shortLabel || sig.expression}
-        </p>
-      )}
-    </GlassCard>
-  </motion.div>
-);
-
-/* ── 4. TABLEAU Q2 ── */
 const EnergyClassification = () => {
   const rows = useMemo(() => Object.entries(signals).map(([key, sig]) => {
-    // Logique simple pour l'affichage statique
     const isPeriodic = getSignalTypeJS(sig.expression || "") === "periodic";
     const E_val = computeEnergy(sig.fn, sig.tRange[0], sig.tRange[1]);
     const P_val = computePower(sig.fn, sig.tRange[0], sig.tRange[1]);
@@ -151,7 +48,6 @@ const EnergyClassification = () => {
   );
 };
 
-/* ── 5. BLOC Q3 ── */
 const PowerX11 = () => {
   const P = computePower(signals.x11.fn, 0, 0.5);
   return (
@@ -184,159 +80,6 @@ const PowerX11 = () => {
   );
 };
 
-/* ── 6. MODAL INTERACTIVE ── */
-const SignalModal = ({ sig, color, label, open, onClose, onUpdate }: any) => {
-  const [apiMetrics, setApiMetrics] = useState<any>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editExpression, setEditExpression] = useState(sig.expression || sig.shortLabel || "");
-  const [editLabel, setEditLabel] = useState(sig.label);
-  const [saveError, setSaveError] = useState<string | null>(null);
-
-  // Aperçu temps réel
-  const previewFn = useMemo(() => {
-    if (!isEditing) return sig.fn;
-    return parseExpression(editExpression) || (() => 0);
-  }, [isEditing, editExpression, sig.fn]);
-
-  // Calcul instantané JS (Avec logique théorique simple)
-  const instantMetrics = useMemo(() => {
-    const type = getSignalTypeJS(isEditing ? editExpression : (sig.expression || ""));
-    const E = computeEnergy(previewFn, sig.tRange[0], sig.tRange[1]);
-    const P = computePower(previewFn, sig.tRange[0], sig.tRange[1]);
-
-    return {
-      energy: type === "periodic" ? "∞" : E.toFixed(4),
-      power: type === "periodic" ? P.toFixed(4) : "0.0000"
-    };
-  }, [previewFn, sig, isEditing, editExpression]);
-
-  // Chargement des données Python
-  // [EXPLANATION] When opening the modal, we automatically ask Python to analyze the signal.
-  useEffect(() => {
-    if (open && sig) {
-      if (!isEditing) {
-        setEditExpression(sig.expression || sig.shortLabel || "");
-        setEditLabel(sig.label);
-        setApiMetrics(null); // Reset metrics while loading
-        fetchSignalMetrics(sig.expression || sig.label, sig.tRange).then(data => setApiMetrics(data));
-      }
-    }
-  }, [open, sig.expression, sig.label]); // Dépendances précises
-
-  const handleSave = () => {
-    setSaveError(null);
-    if (!editExpression.trim()) { setSaveError("Formule vide."); return; }
-
-    const newFn = parseExpression(editExpression);
-    if (!newFn) { setSaveError("Erreur de syntaxe."); return; }
-
-    onUpdate({
-      ...sig,
-      label: editLabel,
-      expression: editExpression,
-      shortLabel: editExpression,
-      fn: newFn
-    });
-
-    setIsEditing(false);
-  };
-
-  // Affichage final : On prend l'API si dispo, sinon le calcul JS instantané
-  const displayEnergy = (apiMetrics && !isEditing) ? apiMetrics.energy : instantMetrics.energy;
-  const displayPower = (apiMetrics && !isEditing) ? apiMetrics.power : instantMetrics.power;
-
-  return (
-    <Dialog open={open} onOpenChange={(v) => { if (!v) { setIsEditing(false); setSaveError(null); onClose(); } }}>
-      <DialogContent className="glass-strong max-w-2xl border-white/10 max-h-[90vh] overflow-y-auto">
-        <DialogHeader className="flex flex-row items-center justify-between pr-8 border-b border-white/5 pb-4">
-          <div className="flex flex-col gap-1 w-full">
-            {isEditing ? (
-              <Input value={editLabel} onChange={e => setEditLabel(e.target.value)} className="glass font-bold text-lg h-8 w-1/2" placeholder="Nom" />
-            ) : (
-              <DialogTitle style={{ color: color }} className="text-xl">{sig.label}</DialogTitle>
-            )}
-
-            {!isEditing && (
-              <p className="text-xs font-mono text-primary/80 flex items-center gap-2">
-                <span className="opacity-50 uppercase tracking-widest text-[9px]">Formule :</span>
-                {sig.expression || sig.shortLabel}
-              </p>
-            )}
-          </div>
-
-          <div className="absolute right-8 top-6">
-            {!isEditing ? (
-              <button onClick={() => setIsEditing(true)} className="p-2 hover:bg-white/10 rounded-full transition-colors group">
-                <Pencil className="w-4 h-4 text-muted-foreground group-hover:text-primary" />
-              </button>
-            ) : (
-              <div className="flex gap-2">
-                <button onClick={handleSave} className="p-2 bg-primary/20 hover:bg-primary/40 rounded-full text-primary"><Save className="w-4 h-4" /></button>
-                <button onClick={() => { setIsEditing(false); setSaveError(null); setEditExpression(sig.expression || ""); }} className="p-2 hover:bg-white/10 rounded-full text-muted-foreground"><X className="w-4 h-4" /></button>
-              </div>
-            )}
-          </div>
-        </DialogHeader>
-
-        <div className="space-y-6 pt-2">
-          {/* Zone d'édition */}
-          {isEditing && (
-            <div className="animate-in fade-in slide-in-from-top-2 space-y-2 p-3 bg-primary/5 rounded-lg border border-primary/10">
-              <label className="text-[10px] uppercase font-bold text-primary block">Modifier la Formule</label>
-              <Input
-                value={editExpression}
-                onChange={e => { setEditExpression(e.target.value); setSaveError(null); }}
-                className="glass font-mono text-sm border-primary/50 bg-black/20"
-              />
-              {saveError && <p className="text-xs text-destructive flex items-center gap-1 font-bold"><AlertCircle className="w-3 h-3" /> {saveError}</p>}
-            </div>
-          )}
-
-          <div className="h-[200px] w-full relative">
-            <SignalChart fn={previewFn} tRange={sig.tRange} label={isEditing ? editLabel : label} color={color} height={200} />
-            {isEditing && <div className="absolute top-2 right-2 text-[10px] text-primary bg-black/50 px-2 py-1 rounded border border-primary/20">Aperçu</div>}
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <GlassCard className="p-4 text-center border-white/5 bg-white/5 flex flex-col items-center justify-center min-h-[100px]">
-              <p className="text-[10px] uppercase opacity-60 mb-1">Énergie {(apiMetrics && !isEditing) ? "(Théorique)" : "(Instant)"}</p>
-              <p className="text-xl font-mono font-bold">{displayEnergy}</p>
-            </GlassCard>
-            <GlassCard className="p-4 text-center border-white/5 bg-white/5 flex flex-col items-center justify-center min-h-[100px]">
-              <p className="text-[10px] uppercase opacity-60 mb-1">Puissance {(apiMetrics && !isEditing) ? "(Théorique)" : "(Instant)"}</p>
-              <p className="text-xl font-mono font-bold">{displayPower}</p>
-            </GlassCard>
-          </div>
-
-          <div className="p-4 bg-black/40 rounded-xl border border-primary/20 shadow-inner min-h-[250px] relative">
-            <div className="flex items-center gap-2 mb-3 border-b border-white/10 pb-2">
-              <Calculator className="w-4 h-4 text-primary" />
-              <p className="text-xs font-bold text-primary tracking-widest uppercase">Démonstration Mathématique</p>
-            </div>
-
-            {isEditing ? (
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground gap-3 pt-10 bg-black/60 backdrop-blur-[2px] z-10">
-                <Pencil className="w-8 h-8 opacity-50" />
-                <p className="text-xs text-center px-4">Sauvegardez pour relancer l'analyse.</p>
-              </div>
-            ) : apiMetrics ? (
-              <div className="text-sm leading-relaxed text-foreground/90 whitespace-pre-wrap font-mono font-normal h-[250px] overflow-y-auto pr-2 custom-scrollbar animate-in fade-in">
-                {apiMetrics.ai_analysis}
-              </div>
-            ) : (
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground gap-3 pt-10">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                <p className="text-xs animate-pulse">Classification théorique en cours...</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
-/* ── 7. PRINCIPAL ── */
 export default function Exercise1() {
   const [selectedSignalId, setSelectedSignalId] = useState<string | null>(null);
   const [allSignals, setAllSignals] = useState<any>({ ...signals });
@@ -347,13 +90,11 @@ export default function Exercise1() {
 
   const selectedSignal = useMemo(() => {
     if (!selectedSignalId) return null;
-    return allSignals[selectedSignalId] || customSignals.find(s => s.id === selectedSignalId);
+    return allSignals[selectedSignalId] || customSignals.find((s: any) => s.id === selectedSignalId);
   }, [selectedSignalId, allSignals, customSignals]);
 
-  // [EXPLANATION] Handler to create new custom signals from the UI.
   const handleAddSignal = () => {
     if (!formLabel || !formExpr) { setFormError("Champs vides"); return; }
-    // Verify the math expression is valid before adding
     const fn = parseExpression(formExpr);
     if (!fn) { setFormError("Expression invalide"); return; }
 

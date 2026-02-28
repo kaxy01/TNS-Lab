@@ -5,6 +5,10 @@ import numpy as np
 import scipy.integrate as integrate
 from google import genai
 import os
+from dotenv import load_dotenv
+
+# Load variables from .env if present
+load_dotenv()
 
 # [EXPLANATION] This file is the backend API using FastAPI.
 # It handles HTTP requests, performs mathematical calculations,
