@@ -1,49 +1,74 @@
-# TNS Lab Hub ⚡
+<div align="center">
+  <h1>⚡ TNS Lab Hub</h1>
+  
+  <p>
+    <strong>Traitement Numérique du Signal - Portail Interactif des Travaux Pratiques</strong>
+  </p>
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-interactive--educatif--signale--lab--ma.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://interactive-educatif-signale-lab-ma.vercel.app)
-![TNS Lab Hub banner](https://img.shields.io/badge/TNS_Lab-Interactive_Learning_Hub-00d8ff?style=for-the-badge&logo=react)
+  <p>
+    <a href="https://interactive-educatif-signale-lab-ma.vercel.app">
+      <img src="https://img.shields.io/badge/Live_Demo-interactive--educatif--signale--lab--ma.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
+    </a>
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  </p>
+</div>
 
-> **Traitement Numérique du Signal - Portail interactif des travaux pratiques**
+<br />
 
-🚀 Interactive learning portal for Digital Signal Processing (DSP / TNS) practical works. Developed for **Université d'Oran - 3ème Année Ingénieur (Sécurité Informatique)**.
+## 📖 Overview
 
-## 🎯 Overview
+**TNS Lab Hub** is a comprehensive, interactive learning portal developed specifically for **Digital Signal Processing (Traitement Numérique du Signal)** practical sessions. Designed to bridge the gap between abstract mathematical concepts and tangible visual understanding.
 
-TNS Lab Hub provides an interactive and visually engaging environment to learn and experiment with Signal Processing concepts. It features dynamic visualizations, real-time calculations, and an intuitive UI powered by modern web technologies.
+This platform empowers students to interactively explore signal properties, visualize operations in real-time, and validate theoretical calculations through a modern, responsive interface.
 
-### Modules Available
+---
 
-*   **🌊 TP 01: Généralités sur les Signaux**
-    *   Deterministic signals, signal energy, and classification.
-    *   Convolution and even/odd decomposition.
-*   **🧪 LABO: Labo Signal**
-    *   Build, analyze, and decompose signals.
-    *   Calculate energy, power, frequency, and view mathematical demonstrations.
+## 🎯 Active Modules
 
-## ✨ Features
+### 🌊 TP 01: Généralités sur les Signaux
+A foundational module focusing on the core principles of signal theory.
+*   **Classification:** Differentiate between continuous and discrete, deterministic and random signals.
+*   **Transformations:** Interactive even and odd decomposition logic.
+*   **Metrics:** Real-time computation of signal energy and fundamental properties.
 
-*   **Interactive Visualizations:** Dynamically interact with signal graphs and mathematical formulas.
-*   **Modern Premium UI:** Uses glassmorphism, neon accents, and smooth animations to provide a premium user experience.
-*   **Responsive Design:** Fully responsive layout that works across devices securely.
-*   **Real-time Analysis:** Explore signal properties (energy, power) calculated instantly.
+### 🧪 LABO: Signal Laboratory
+An advanced sandbox environment for signal experimentation.
+*   **Signal Construction:** Build complex signals by combining basic primitives (Dirac, Step, Sine, etc.).
+*   **Advanced Analysis:** Dynamic real-time plotting of power, energy, and frequency spectrums.
+*   **Theoretical Demonstrations:** Access step-by-step mathematical proofs alongside visual representations.
 
-## 💻 Tech Stack
+---
 
-This project is built using modern front-end tools:
+## ✨ Key Features
 
-*   **[React 18](https://reactjs.org/)** + **[TypeScript](https://www.typescriptlang.org/)**
-*   **[Vite](https://vitejs.dev/)** - Next-generation front-end tooling
-*   **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-*   **[shadcn/ui](https://ui.shadcn.com/)** - Reusable UI components
-*   **[Framer Motion](https://www.framer.com/motion/)** - Production-ready animations
-*   **[Recharts](https://recharts.org/)** - Composable charting library
+*   **Real-Time Interactivity:** Instantly observe how parameter adjustments affect signal behavior and subsequent mathematical properties.
+*   **Premium User Interface:** Crafted with a modern, glassmorphic aesthetic to reduce cognitive load and enhance focus.
+*   **Responsive Architecture:** Fully optimized across all device sizes, ensuring learning is accessible anywhere.
+*   **Robust Computations:** Fast and accurate algorithmic implementations for complex signal math operations hidden behind a clean UI.
+
+---
+
+## �️ Technology Stack
+
+Built with a modern, scalable front-end architecture:
+
+*   **Core:** [React 18](https://reactjs.org/) & [TypeScript](https://www.typescriptlang.org/) for robust, type-safe development.
+*   **Build Tool:** [Vite](https://vitejs.dev/) for lightning-fast HMR and optimized production builds.
+*   **Styling:** [Tailwind CSS](https://tailwindcss.com/) for utility-first styling and dynamic custom theme design.
+*   **Components:** [shadcn/ui](https://ui.shadcn.com/) for accessible, customizable, and high-quality UI primitives.
+*   **Animations:** [Framer Motion](https://www.framer.com/motion/) powering smooth page transitions and micro-interactions.
+*   **Data Visualization:** [Recharts](https://recharts.org/) for reliable and responsive signal rendering.
+
+---
 
 ## 🚀 Getting Started
 
-To run this project locally, follow these steps:
+To run the full interactive environment locally, follow these instructions:
 
 ### Prerequisites
-Make sure you have Node.js and npm installed on your machine.
+*   [Node.js](https://nodejs.org/) (v18.0.0 or higher recommended)
+*   npm (v9 or higher)
 
 ### Installation
 
@@ -53,25 +78,32 @@ Make sure you have Node.js and npm installed on your machine.
    cd v0-interactive-learning-hub-main
    ```
 
-2. **Install dependencies:**
+2. **Install project dependencies:**
    ```bash
    npm install
    ```
 
-3. **Start the development server:**
+3. **Launch the development server:**
    ```bash
    npm run dev
    ```
 
-4. **Open in browser:**
-   Navigate to `http://localhost:5173` to explore the TNS Lab Hub.
+4. **Access the application:**
+   Open your browser and navigate to `http://localhost:5173`.
+
+---
 
 ## 🎓 Academic Context
 
-**Institution:** Université d'Oran
-**Level:** 3ème Année Ingénieur
-**Specialty:** Sécurité Informatique
-**Academic Year:** 2024/2025
+This platform serves as the official practical work companion for the academic year **2025/2026**.
 
----
-*Crafted with precision for interactive learning.*
+*   **Institution:** Université d'Oran
+*   **Level:** 3ème Année Ingénieur
+*   **Specialty:** Sécurité Informatique
+*   **Academic Year:** 2025/2026
+
+<br />
+
+<div align="center">
+  <i>Crafted with precision to elevate interactive engineering education.</i>
+</div>
