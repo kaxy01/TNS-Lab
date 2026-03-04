@@ -1,73 +1,77 @@
-# Welcome to your Lovable project
+# TNS Lab Hub ⚡
 
-## Project info
+[![Live Demo](https://img.shields.io/badge/Live_Demo-interactive--educatif--signale--lab--ma.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://interactive-educatif-signale-lab-ma.vercel.app)
+![TNS Lab Hub banner](https://img.shields.io/badge/TNS_Lab-Interactive_Learning_Hub-00d8ff?style=for-the-badge&logo=react)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+> **Traitement Numérique du Signal - Portail interactif des travaux pratiques**
 
-## How can I edit this code?
+🚀 Interactive learning portal for Digital Signal Processing (DSP / TNS) practical works. Developed for **Université d'Oran - 3ème Année Ingénieur (Sécurité Informatique)**.
 
-There are several ways of editing your application.
+## 🎯 Overview
 
-**Use Lovable**
+TNS Lab Hub provides an interactive and visually engaging environment to learn and experiment with Signal Processing concepts. It features dynamic visualizations, real-time calculations, and an intuitive UI powered by modern web technologies.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### Modules Available
 
-Changes made via Lovable will be committed automatically to this repo.
+*   **🌊 TP 01: Généralités sur les Signaux**
+    *   Deterministic signals, signal energy, and classification.
+    *   Convolution and even/odd decomposition.
+*   **🧪 LABO: Labo Signal**
+    *   Build, analyze, and decompose signals.
+    *   Calculate energy, power, frequency, and view mathematical demonstrations.
 
-**Use your preferred IDE**
+## ✨ Features
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+*   **Interactive Visualizations:** Dynamically interact with signal graphs and mathematical formulas.
+*   **Modern Premium UI:** Uses glassmorphism, neon accents, and smooth animations to provide a premium user experience.
+*   **Responsive Design:** Fully responsive layout that works across devices securely.
+*   **Real-time Analysis:** Explore signal properties (energy, power) calculated instantly.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 💻 Tech Stack
 
-Follow these steps:
+This project is built using modern front-end tools:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+*   **[React 18](https://reactjs.org/)** + **[TypeScript](https://www.typescriptlang.org/)**
+*   **[Vite](https://vitejs.dev/)** - Next-generation front-end tooling
+*   **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+*   **[shadcn/ui](https://ui.shadcn.com/)** - Reusable UI components
+*   **[Framer Motion](https://www.framer.com/motion/)** - Production-ready animations
+*   **[Recharts](https://recharts.org/)** - Composable charting library
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🚀 Getting Started
 
-# Step 3: Install the necessary dependencies.
-npm i
+To run this project locally, follow these steps:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### Prerequisites
+Make sure you have Node.js and npm installed on your machine.
 
-**Edit a file directly in GitHub**
+### Installation
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. **Clone the repository:**
+   ```bash
+   git clone <YOUR_GIT_URL>
+   cd v0-interactive-learning-hub-main
+   ```
 
-**Use GitHub Codespaces**
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
 
-## What technologies are used for this project?
+4. **Open in browser:**
+   Navigate to `http://localhost:5173` to explore the TNS Lab Hub.
 
-This project is built with:
+## 🎓 Academic Context
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+**Institution:** Université d'Oran
+**Level:** 3ème Année Ingénieur
+**Specialty:** Sécurité Informatique
+**Academic Year:** 2024/2025
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+*Crafted with precision for interactive learning.*
