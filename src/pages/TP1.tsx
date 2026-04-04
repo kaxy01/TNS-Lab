@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Waves, GitBranch, BarChart3, FlaskConical, Clock } from "lucide-react";
+import { ArrowLeft, Waves, GitBranch, BarChart3, FlaskConical, Clock, Activity } from "lucide-react";
 import WaveBackground from "@/components/WaveBackground";
 import Exercise1 from "@/components/tp1/Exercise1";
 import Exercise2 from "@/components/tp1/Exercise2";
+import Exercise3 from "@/components/tp1/Exercise3";
+import Exercise4 from "@/components/tp1/Exercise4";
+import Exercise5 from "@/components/tp1/Exercise5";
 import GlassCard from "@/components/GlassCard";
 
 const exercises = [
   { id: "ex1", label: "Exercice 1", subtitle: "Signaux", icon: Waves, ready: true },
   { id: "ex2", label: "Exercice 2", subtitle: "Dirac & Signaux", icon: GitBranch, ready: true },
-  { id: "ex3", label: "Exercice 3", subtitle: "x₁₄(t)", icon: BarChart3, ready: false },
-  { id: "ex4", label: "Exercice 4", subtitle: "Paire/Impaire", icon: FlaskConical, ready: false },
+  { id: "ex3", label: "Exercice 3", subtitle: "x₁₄(t)", icon: BarChart3, ready: true },
+  { id: "ex4", label: "Exercice 4", subtitle: "Paire/Impaire", icon: FlaskConical, ready: true },
+  { id: "ex5", label: "Exercice 5", subtitle: "Spectre & TF", icon: Activity, ready: true },
 ];
 
 const ComingSoon = ({ label }: { label: string }) => (
@@ -32,8 +36,9 @@ const TP1 = () => {
     if (!ex?.ready) return <ComingSoon label={ex?.label ?? ""} />;
     if (activeEx === "ex1") return <Exercise1 />;
     if (activeEx === "ex2") return <Exercise2 />;
-    //    if (activeEx === "ex3") return <Exercise3 />;
-    //    if (activeEx === "ex4") return <Exercise4 />;
+    if (activeEx === "ex3") return <Exercise3 />;
+    if (activeEx === "ex4") return <Exercise4 />;
+    if (activeEx === "ex5") return <Exercise5 />;
     return null;
   };
 

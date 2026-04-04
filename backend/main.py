@@ -877,6 +877,65 @@ async def ex_lab_quiz_check(req: QuizCheckRequest):
     }
 
 
+# ================================================================
+# EXERCICE 3 — Calcul des dérivées et parité
+# ================================================================
+
+class Ex3Request(BaseModel):
+    expression: str
+
+@app.post("/ex3/compute")
+async def ex3_compute(req: Ex3Request):
+    t = np.linspace(-5, 5, 500)
+    
+    safe_dict = {
+        'np': np, 'sin': np.sin, 'cos': np.cos, 'tan': np.tan, 
+        'exp': np.exp, 'pi': np.pi, 'sqrt': np.sqrt, 'abs': np.abs,
+        'rect': lambda x: np.where(np.abs(x) <= 0.5, 1.0, 0.0),
+        'tri': lambda x: np.where(np.abs(x) <= 1, 1.0 - np.abs(x), 0.0),
+        'u': lambda x: np.where(x >= 0, 1.0, 0.0),
+        'ramp': lambda x: np.where(x >= 0, x, 0.0),
+        'sinc': lambda x: np.sinc(x),
+        'where': np.where, 'heaviside': np.heaviside, 'sign': np.sign
+    }
+    
+    expr_py = req.expression.replace("^", "**")
+    
+    try:
+        # Evaluate y(t)
+        safe_ns = {**safe_dict, 't': t}
+        y = eval(expr_py, {"__builtins__": {}}, safe_ns)
+        if isinstance(y, (int, float)):
+            y = np.ones_like(t) * float(y)
+            
+        dy = np.gradient(y, t)
+        d2y = np.gradient(dy, t)
+        
+        # Evaluate y(-t)
+        safe_ns_rev = {**safe_dict, 't': -t}
+        y_rev = eval(expr_py, {"__builtins__": {}}, safe_ns_rev)
+        if isinstance(y_rev, (int, float)):
+            y_rev = np.ones_like(t) * float(y_rev)
+            
+        y_even = (y + y_rev) / 2.0
+        y_odd = (y - y_rev) / 2.0
+        
+        points = []
+        for i in range(len(t)):
+            if i % 2 == 0:
+                points.append({
+                    "t": round(float(t[i]), 3),
+                    "y": round(float(y[i]), 4),
+                    "dy": round(float(dy[i]), 4),
+                    "d2y": round(float(d2y[i]), 4),
+                    "y_even": round(float(y_even[i]), 4),
+                    "y_odd": round(float(y_odd[i]), 4)
+                })
+            
+        return {"points": points, "error": None}
+    except Exception as e:
+        return {"points": [], "error": str(e)}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
