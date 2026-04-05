@@ -936,6 +936,137 @@ async def ex3_compute(req: Ex3Request):
     except Exception as e:
         return {"points": [], "error": str(e)}
 
+# ================================================================
+# TP 2 - Exercice 1 — Séries de Fourier
+# ================================================================
+
+class TP2Ex1Request(BaseModel):
+    expression: str
+    period: float
+    harmonics: int = 15
+
+@app.post("/tp2/ex1/compute")
+async def tp2_ex1_compute(req: TP2Ex1Request):
+    T = req.period
+    if T <= 0:
+        return {"error": "La période T doit être strictement positive."}
+        
+    N = int(req.harmonics)
+    w0 = 2 * np.pi / T
+    
+    safe_dict = {
+        'np': np, 'sin': np.sin, 'cos': np.cos, 'tan': np.tan, 
+        'exp': np.exp, 'pi': np.pi, 'sqrt': np.sqrt, 'abs': np.abs,
+        'rect': lambda x: np.where(np.abs(x) <= 0.5, 1.0, 0.0),
+        'tri': lambda x: np.where(np.abs(x) <= 1, 1.0 - np.abs(x), 0.0),
+        'u': lambda x: np.where(x >= 0, 1.0, 0.0),
+        'ramp': lambda x: np.where(x >= 0, x, 0.0),
+        'sinc': lambda x: np.sinc(x),
+        'where': np.where, 'heaviside': np.heaviside, 'sign': np.sign
+    }
+    
+    expr_py = req.expression.replace("^", "**")
+    
+    def evaluate_x(t_val):
+        safe_ns = {**safe_dict, 't': t_val}
+        try:
+            val = eval(expr_py, {"__builtins__": {}}, safe_ns)
+            if isinstance(val, (int, float, complex)):
+                return float(np.real(val))
+            return val
+        except Exception:
+            return 0.0
+            
+    def x_scalar(t_val):
+        safe_ns = {**safe_dict, 't': np.array([t_val])}
+        try:
+            val = eval(expr_py, {"__builtins__": {}}, safe_ns)
+            if isinstance(val, (int, float, complex)):
+                return float(np.real(val))
+            return float(np.real(val[0]))
+        except Exception:
+            return 0.0
+
+    try:
+        coefficients = {}
+        spectral_points = []
+        
+        # Integration for power
+        # For piecewise functions causing integration limit warnings, limit=500
+        import warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            power_integral, _ = integrate.quad(lambda t: x_scalar(t)**2, -T/2, T/2, limit=200)
+        
+        P = power_integral / T
+        
+        # Coefficients computation
+        for n in range(-N, N + 1):
+            def real_integrand(t):
+                return x_scalar(t) * np.cos(-n * w0 * t)
+            def imag_integrand(t):
+                return x_scalar(t) * np.sin(-n * w0 * t)
+                
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                real_part, _ = integrate.quad(real_integrand, -T/2, T/2, limit=200)
+                imag_part, _ = integrate.quad(imag_integrand, -T/2, T/2, limit=200)
+            
+            cn = (real_part + 1j * imag_part) / T
+            coefficients[n] = cn
+            
+            # Clean up phase for very small magnitudes
+            mag = float(np.abs(cn))
+            phase = float(np.angle(cn))
+            if mag < 1e-5:
+                phase = 0.0
+                mag = 0.0
+                
+            spectral_points.append({
+                "n": n,
+                "magnitude": mag,
+                "phase": phase
+            })
+            
+        t_arr = np.linspace(-T, T, 400)
+        y_orig = evaluate_x(t_arr)
+        if isinstance(y_orig, (int, float)):
+            y_orig = np.full_like(t_arr, y_orig)
+            
+        y_recon = np.zeros_like(t_arr, dtype=complex)
+        for n in range(-N, N + 1):
+            y_recon += coefficients[n] * np.exp(1j * n * w0 * t_arr)
+            
+        time_points = []
+        for i in range(len(t_arr)):
+            time_points.append({
+                "t": float(t_arr[i]),
+                "y": float(np.real(y_orig[i])),
+                "y_reconstructed": float(np.real(y_recon[i]))
+            })
+            
+        ai_analysis = None
+        if client:
+            try:
+                prompt = (
+                    f"Tu es un professeur de traitement du signal. L'étudiant analyse x(t) = {req.expression} "
+                    f"sur une période T={T} avec les séries de Fourier.\n"
+                    "Rédige une courte explication (max 10 lignes) expliquant si la fonction possède des propriétés "
+                    "de parité/symétrie (paire, impaire, etc.) et comment cela influence le spectre. Utilise des emojis. Pas de LaTeX."
+                )
+                ai_analysis = ai_generate(prompt)
+            except Exception:
+                pass
+
+        return {
+            "time_points": time_points,
+            "spectral_points": spectral_points,
+            "power": P,
+            "ai_analysis": ai_analysis
+        }
+    except Exception as e:
+        return {"error": f"Erreur de calcul NumPy/SciPy: {str(e)}"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

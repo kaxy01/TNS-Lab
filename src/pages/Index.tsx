@@ -123,26 +123,31 @@ const Index = () => {
               </GlassCard>
             </Link>
 
-            {/* Future TP placeholders */}
-            {[2].map((num) => (
+            {/* TP2 Card */}
+            <Link to="/tp2" className="group">
               <GlassCard
-                key={num}
-                className="h-full opacity-40 cursor-not-allowed"
+                glow="cyan"
+                className="h-full transition-all duration-500 group-hover:scale-[1.03] group-hover:shadow-[0_0_30px_hsl(187_100%_55%/0.4)]"
+                whileHover={{ y: -5 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-lg bg-muted/30 flex items-center justify-center">
-                    <BookOpen className="w-5 h-5 text-muted-foreground/50" />
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <span className="text-xs text-muted-foreground font-mono">TP 0{num}</span>
-                    <h3 className="text-lg font-semibold text-muted-foreground/50">Bientôt disponible</h3>
+                    <span className="text-xs text-primary font-mono">TP 02</span>
+                    <h3 className="text-lg font-semibold text-foreground">Séries de Fourier</h3>
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground/40">
-                  Ce TP sera ajouté prochainement.
+                <p className="text-sm text-muted-foreground mb-4">
+                  Analyse des signaux périodiques, calcul des coefficients de Fourier, formes trigonométrique et harmonique.
                 </p>
+                <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
+                  Explorer <ArrowRight className="w-4 h-4" />
+                </div>
               </GlassCard>
-            ))}
+            </Link>
           </div>
         </motion.div>
 
