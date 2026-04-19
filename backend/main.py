@@ -1067,6 +1067,45 @@ async def tp2_ex1_compute(req: TP2Ex1Request):
     except Exception as e:
         return {"error": f"Erreur de calcul NumPy/SciPy: {str(e)}"}
 
+# ================================================================
+# EDUCATION HUB — Tuteur IA (Etape par Etape)
+# ================================================================
+
+class TutorRequest(BaseModel):
+    context: str
+    question: str
+
+@app.post("/education/chat")
+async def education_chat(req: TutorRequest):
+    """
+    Endpoint pour le module Education.
+    Agit comme un tuteur qui explique "pourquoi" on fait une certaine etape.
+    """
+    if not client and not groq_client:
+        return {"response": "Erreur: Aucune IA disponible. Vérifiez vos clés API."}
+
+    prompt = f"""Tu es un professeur de traitement du signal très patient et pédagogue.
+L'étudiant est bloqué sur cette étape d'un exercice ou ce concept de cours :
+[CONTEXTE DE L'ETAPE]
+{req.context}
+[FIN DU CONTEXTE]
+
+Voici la question de l'étudiant :
+"{req.question}"
+
+INSTRUCTIONS STRICTES :
+1. Ne donne pas juste la réponse, guide-le étape par étape.
+2. Explique le "Pourquoi" physique ou mathématique derrière la formule.
+3. Utilise des emojis pour rendre ça ludique.
+4. Utilise des symboles mathématiques UNICODE (∫, ∞, π, ², →). PAS de LaTeX.
+5. Fais court et précis (max 15 lignes).
+"""
+    try:
+        response = ai_generate(prompt)
+        return {"response": response}
+    except Exception as e:
+        return {"response": f"⚠️ Erreur lors de la génération de l'explication : {str(e)}"}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

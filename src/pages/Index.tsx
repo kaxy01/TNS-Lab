@@ -70,7 +70,7 @@ const Index = () => {
             Travaux Pratiques
           </h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
             {/* TP1 Card */}
             <Link to="/tp1" className="group">
               <GlassCard
@@ -145,6 +145,33 @@ const Index = () => {
                 </p>
                 <div className="flex items-center gap-2 text-primary text-sm font-medium group-hover:gap-3 transition-all">
                   Explorer <ArrowRight className="w-4 h-4" />
+                </div>
+              </GlassCard>
+            </Link>
+
+            {/* Education Card */}
+            <Link to="/education" className="group">
+              <GlassCard
+                glow="cyan"
+                className="h-full transition-all duration-500 group-hover:scale-[1.03] group-hover:shadow-[0_0_30px_hsl(280_100%_60%/0.4)] relative overflow-hidden"
+                whileHover={{ y: -5 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="absolute top-0 right-0 bg-purple-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg z-10">NOUVEAU</div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <div>
+                    <span className="text-xs text-purple-400 font-mono">APPRENTISSAGE</span>
+                    <h3 className="text-lg font-semibold text-foreground">Tuteur IA & Éducation</h3>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Apprenez la DSP étape par étape. TD interactifs guidés par un professeur IA patient. Posez vos questions !
+                </p>
+                <div className="flex items-center gap-2 text-purple-400 text-sm font-medium group-hover:gap-3 transition-all">
+                  Apprendre <ArrowRight className="w-4 h-4" />
                 </div>
               </GlassCard>
             </Link>
