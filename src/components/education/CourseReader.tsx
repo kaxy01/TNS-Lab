@@ -30,11 +30,19 @@ export default function CourseReader({ chapter }: { chapter: Chapter }) {
     setIsLoading(true);
 
     try {
+      const currentConceptData = chapter.concepts[currentConcept];
+      const fullContext = `
+Chapitre : ${chapter.title}
+Concept actuel (${currentConcept + 1}/${chapter.concepts.length}) : ${currentConceptData.title}
+Contenu du cours : ${currentConceptData.content}
+${currentConceptData.aiPromptContext ? `Notes pédagogiques : ${currentConceptData.aiPromptContext}` : ""}
+`.trim();
+
       const response = await fetch(`${API_BASE_URL}/education/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          context: chapter.concepts[currentConcept].aiPromptContext || chapter.concepts[currentConcept].content,
+          context: fullContext,
           question: userMessage,
         }),
       });

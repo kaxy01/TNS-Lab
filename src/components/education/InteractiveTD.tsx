@@ -30,11 +30,19 @@ export default function InteractiveTD({ exercise }: { exercise: Exercise }) {
     setIsLoading(true);
 
     try {
+      const currentStepData = exercise.steps[currentStep];
+      const fullContext = `
+Énoncé de l'exercice : ${exercise.statement}
+Étape actuelle (${currentStep + 1}/${exercise.steps.length}) : ${currentStepData.title}
+Contenu de l'étape : ${currentStepData.content}
+${currentStepData.aiPromptContext ? `Contexte pédagogique supplémentaire : ${currentStepData.aiPromptContext}` : ""}
+`.trim();
+
       const response = await fetch(`${API_BASE_URL}/education/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          context: exercise.steps[currentStep].aiPromptContext || exercise.steps[currentStep].content,
+          context: fullContext,
           question: userMessage,
         }),
       });
