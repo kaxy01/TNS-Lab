@@ -64,13 +64,13 @@ const Index = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className="w-full max-w-4xl"
+          className="w-full max-w-7xl"
         >
           <h2 className="text-lg font-medium text-muted-foreground mb-6 text-center">
             Travaux Pratiques
           </h2>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* TP1 Card */}
             <Link to="/tp1" className="group">
               <GlassCard
