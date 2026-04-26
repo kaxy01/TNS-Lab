@@ -41,7 +41,7 @@ export default function Exercise1() {
             Solution : Exercice 1 (Signal Dent de Scie)
           </CardTitle>
           <CardDescription>
-            Analyse de Fourier exacte de la rampe périodique de période $T=2s$.
+            Analyse de Fourier exacte de la rampe périodique de période T=2s.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -49,7 +49,7 @@ export default function Exercise1() {
             <p className="font-semibold text-foreground mb-2">Problème défini :</p>
             <p className="text-muted-foreground ml-2 border-l-2 border-primary pl-3">
               Soit le signal Dent de scie de période (T=2s) : <br />
-              $x(t) = t/2$ pour $t \in [0, 2[$
+              x(t) = t/2 pour t ∈ [0, 2[
             </p>
           </div>
         </CardContent>
@@ -62,17 +62,17 @@ export default function Exercise1() {
           <CardHeader className="py-4 bg-muted/10">
             <CardTitle className="text-sm font-bold flex items-center gap-2">
               <span className="bg-blue-500/20 text-blue-400 w-6 h-6 flex items-center justify-center rounded-full text-xs">1</span>
-              Représentation Exponentielle Complexe ( $C_n$ )
+              Représentation Exponentielle Complexe ( C_n )
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-4 space-y-4 text-sm text-muted-foreground">
-            <p>Calcul de la composante continue ($n=0$) :</p>
+            <p>Calcul de la composante continue (n=0) :</p>
             <div className="bg-background border border-border p-3 rounded font-mono text-center neon-text-cyan flex flex-col items-center">
               <span>C₀ = 1/T ∫ x(t) dt</span>
               <span>C₀ = 1/2 ∫ (t/2) dt = 1/2 [t²/4] = 1/2</span>
             </div>
 
-            <p>Calcul des coefficients $n \neq 0$ avec $\omega_0 = 2\pi/T = \pi$ :</p>
+            <p>Calcul des coefficients n ≠ 0 avec ω₀ = 2π/T = π :</p>
             <div className="bg-background border border-border p-3 rounded font-mono text-center neon-text-cyan flex flex-col items-center">
               <span>Cₙ = 1/2 ∫(t/2) e^(-jnπt) dt</span>
               <span className="text-muted-foreground text-xs mt-1">(Intégration par parties u=t/2, dv=e^(-jnπt)dt)</span>
@@ -145,11 +145,11 @@ export default function Exercise1() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4 space-y-3 text-sm">
-              <p className="text-muted-foreground">On déduit $a_n$ et $b_n$ depuis $C_n$ :</p>
+              <p className="text-muted-foreground">On déduit a_n et b_n depuis C_n :</p>
               <ul className="list-disc pl-5 text-muted-foreground space-y-1">
-                <li>$a_0 = C_0 = 1/2$</li>
-                <li>$a_n = C_n + C_{"{-n}"} = 0$ (car partie réelle nulle)</li>
-                <li>$b_n = j(C_n - C_{"{-n}"}) = -1 / (n\pi)$</li>
+                <li>a₀ = C₀ = 1/2</li>
+                <li>a_n = C_n + C_(-n) = 0 (car partie réelle nulle)</li>
+                <li>b_n = j(C_n - C_(-n)) = -1 / (nπ)</li>
               </ul>
               <div className="bg-background border border-border p-3 rounded font-mono text-center neon-text-cyan mx-auto w-full">
                 x(t) = 1/2 - Σ [ 1/(nπ) · sin(nπt) ]
@@ -166,16 +166,16 @@ export default function Exercise1() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4 space-y-3 text-sm">
-              <p className="text-muted-foreground">On exprime le signal sous la forme $A_n \cos(n\omega_0 t + \Phi_n)$ :</p>
+              <p className="text-muted-foreground">On exprime le signal sous la forme A_n cos(nω₀t + Φ_n) :</p>
               <ul className="list-disc pl-5 text-muted-foreground space-y-1">
-                <li>$A_0 = a_0 = 1/2$</li>
-                <li>$A_n = \sqrt{"{a_n^2 + b_n^2}"} = 1 / (n\pi)$</li>
-                <li>$\Phi_n = \arctan(-b_n/a_n) = \pi/2$</li>
+                <li>A₀ = a₀ = 1/2</li>
+                <li>A_n = √(a_n² + b_n²) = 1 / (nπ)</li>
+                <li>Φ_n = arctan(-b_n/a_n) = π/2</li>
               </ul>
               <div className="bg-background border border-border p-3 rounded font-mono text-center neon-text-cyan mx-auto w-full">
                 x(t) = 1/2 + Σ [ 1/(nπ) · cos(nπt + π/2) ]
               </div>
-              <p className="text-xs text-muted-foreground/70 text-center">Note: $\cos(x + \pi/2) = -\sin(x)$, on retombe sur la forme trigonométrique.</p>
+              <p className="text-xs text-muted-foreground/70 text-center">Note: cos(x + π/2) = -sin(x), on retombe sur la forme trigonométrique.</p>
             </CardContent>
           </Card>
         </div>

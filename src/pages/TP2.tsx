@@ -5,10 +5,13 @@ import { ArrowLeft, Activity, Sigma } from "lucide-react";
 import WaveBackground from "@/components/WaveBackground";
 import GlassCard from "@/components/GlassCard";
 import Exercise1 from "@/components/tp2/Exercise1";
+import Exercise2 from "@/components/tp2/Exercise2";
+import Exercise3 from "@/components/tp2/Exercise3";
 
 const exercises = [
   { id: "ex1", label: "Exercice 1", subtitle: "Série de Fourier", icon: Sigma, ready: true },
-  { id: "ex2", label: "Exercice 2", subtitle: "Transformée de Fourier", icon: Activity, ready: false },
+  { id: "ex2", label: "Exercice 2", subtitle: "Transformée de Fourier", icon: Activity, ready: true },
+  { id: "ex3", label: "Exercice 3", subtitle: "Analyse d'un signal analytique", icon: Activity, ready: true },
 ];
 
 const ComingSoon = ({ label }: { label: string }) => (
@@ -28,6 +31,8 @@ const TP2 = () => {
     const ex = exercises.find((e) => e.id === activeEx);
     if (!ex?.ready) return <ComingSoon label={ex?.label ?? ""} />;
     if (activeEx === "ex1") return <Exercise1 />;
+    if (activeEx === "ex2") return <Exercise2 />;
+    if (activeEx === "ex3") return <Exercise3 />;
     return null;
   };
 
